@@ -1,5 +1,12 @@
 # node modules
 node_modules
 
-# env files
+# build files
+dist/**/*
+
+# API keys / secrets
 .env
+
+# database
+src/supabase
+src/src.code-workspace
