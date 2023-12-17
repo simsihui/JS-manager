@@ -1,23 +1,13 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 
-import { PrismaClient } from '@prisma/client';
+import { authUser, getUser, logoutUser, registerUser, updateUser } from '../controllers/user';
+import protect from '../middleware/auth';
 
 const router: Router = Router();
-const prisma: PrismaClient = new PrismaClient();
 
-router.post("/", async (req: Request, res: Response) => {
-  const { name, email } = req.body;
-  try {
-    const user = await prisma.user.create({
-      data: {
-        name: name,
-        email: email,
-      },
-    });
-    res.send(user);
-  } catch (error) {
-    res.status(409).send({ error: "User already exists" });
-  }
-});
+router.post("/auth", authUser);
+router.post("/register", registerUser);
+router.post("/logout", logoutUser);
+router.route("/").get(protect, getUser).put(protect, updateUser);
 
 export default router;
