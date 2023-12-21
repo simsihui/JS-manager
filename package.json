@@ -1,0 +1,20 @@
+{
+  "name": "js-manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm run dev --prefix backend",
+    "db": "npx supabase start --workdir backend/src/",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "devdb": "concurrently \"npm run server\" \"npm run client\" \"npm run db\"",
+    "devdb:stop": "npx supabase stop --workdir backend/src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
