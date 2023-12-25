@@ -6,8 +6,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, TextField, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { setCredentials } from '../slices/authSlice';
-import { useUpdateUserMutation } from '../slices/userApiSlice';
+import { setCredentials } from '../features/auth/authSlice';
+import { useUpdateUserMutation } from '../features/user/userApiSlice';
 import { Error } from '../types/Error.types';
 
 const Settings = () => {

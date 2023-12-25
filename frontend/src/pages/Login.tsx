@@ -9,8 +9,20 @@ const Login = () => {
   const [haveAccount, setHaveAccount] = useState(true);
 
   return (
-    <Box className="flex h-full w-full items-center justify-center">
-      <Paper elevation={24} className="h-4/5 w-4/5 rounded-3xl">
+    <Box
+      className="flex h-full w-full items-center justify-center"
+      sx={{
+        backgroundImage: "url('svitlana-j7Ssk0Km8Jo-unsplash.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+      }}
+    >
+      <Paper
+        elevation={24}
+        className="h-4/5 w-4/5 rounded-3xl"
+        sx={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
+      >
         <Stack className="flex h-full flex-col md:flex-row">
           {haveAccount ? (
             <Box

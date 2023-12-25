@@ -11,6 +11,7 @@ import { StyledEngineProvider } from '@mui/material';
 
 import App from './App.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
+import Dashboard from './pages/Dashboard.tsx';
 import Home from './pages/Home.tsx';
 import Login from './pages/Login.tsx';
 import Settings from './pages/Settings.tsx';
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route index path="/login" element={<Login />} />
       {/* Private Routes */}
       <Route path="" element={<PrivateRoute />}>
+        <Route index path="/dashboard" element={<Dashboard />} />
         <Route index path="/settings" element={<Settings />} />
       </Route>
     </Route>,

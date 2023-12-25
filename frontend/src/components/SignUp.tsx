@@ -1,28 +1,31 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { setCredentials } from '../slices/authSlice';
-import { useRegisterMutation } from '../slices/userApiSlice';
+import { setCredentials } from '../features/auth/authSlice';
+import { useRegisterMutation } from '../features/user/userApiSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { Error } from '../types/Error.types';
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width:600px)"); // check screen size
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
@@ -46,7 +49,7 @@ const SignUp = () => {
   };
 
   return (
-    <Box className="p-8">
+    <Box className="p-16">
       <Typography component="h1" variant="h5" className="text-center">
         Sign Up
       </Typography>
@@ -73,13 +76,22 @@ const SignUp = () => {
           fullWidth
           name="password"
           label="Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           id="password"
           autoComplete="current-password"
           value={password}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setPassword(e.target.value)
           }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           size={isSmallScreen ? "small" : "medium"}
@@ -88,13 +100,22 @@ const SignUp = () => {
           fullWidth
           name="confirmPassword"
           label="Confirm Password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           id="confirmPassword"
           autoComplete="current-password"
           value={confirmPassword}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setConfirmPassword(e.target.value)
           }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         <LoadingButton

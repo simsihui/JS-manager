@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 
-import { clearCredentials } from '../slices/authSlice';
-import { useLogoutMutation } from '../slices/userApiSlice';
+import { clearCredentials } from '../features/auth/authSlice';
+import { useLogoutMutation } from '../features/user/userApiSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -21,8 +22,8 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const { userInfo } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const { userInfo } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [logout] = useLogoutMutation();
@@ -37,6 +38,31 @@ const Header = () => {
       console.log(err);
     }
   };
+
+  const links = [
+    // navlinks
+    {
+      name: "Dashboard",
+      icon: <DashboardIcon />,
+      onClick: () => {
+        navigate("/dashboard");
+        handleClose();
+      },
+    },
+    {
+      name: "Settings",
+      icon: <SettingsIcon />,
+      onClick: () => {
+        navigate("/settings");
+        handleClose();
+      },
+    },
+    {
+      name: "Logout",
+      icon: <LogoutIcon />,
+      onClick: handleLogout,
+    },
+  ];
 
   return (
     <AppBar position="static">
@@ -73,26 +99,15 @@ const Header = () => {
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                "aria-labelledby": "basic-button",
+                "aria-labelledby": "menu-button",
               }}
             >
-              <MenuItem
-                onClick={() => {
-                  navigate("/settings");
-                  handleClose();
-                }}
-              >
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </MenuItem>
+              {links.map((link) => (
+                <MenuItem onClick={link.onClick}>
+                  <ListItemIcon>{link.icon}</ListItemIcon>
+                  <ListItemText>{link.name}</ListItemText>
+                </MenuItem>
+              ))}
             </Menu>
           </>
         ) : (
