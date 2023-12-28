@@ -14,10 +14,14 @@ export const getProjects = asyncHandler(async (req: Request, res: Response) => {
       id: req.user.id,
     },
     select: {
-      projects: true,
+      projects: {
+        orderBy: {
+          updatedAt: "desc",
+        },
+      },
     },
   });
-  res.status(200).send(projects);
+  res.status(200).send(projects?.projects);
 });
 
 // @desc    Get single project
@@ -46,9 +50,10 @@ export const getProject = asyncHandler(async (req: Request, res: Response) => {
 export const createProject = asyncHandler(
   async (req: Request, res: Response) => {
     // check if project name is unique at user level
+    const projectName = req.body.name.replace(/\s/g, "-");
     const isUnique = await prisma.project.findFirst({
       where: {
-        name: req.body.name,
+        name: projectName,
         userId: req.user.id,
       },
     });
@@ -56,7 +61,7 @@ export const createProject = asyncHandler(
     if (!isUnique) {
       const project = await prisma.project.create({
         data: {
-          name: req.body.name,
+          name: projectName,
           user: {
             connect: {
               id: req.user.id,

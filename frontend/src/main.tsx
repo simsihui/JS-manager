@@ -10,6 +10,7 @@ import {
 import { StyledEngineProvider } from '@mui/material';
 
 import App from './App.tsx';
+import Project from './components/dashboard/Project.tsx';
 import PrivateRoute from './components/PrivateRoute.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import Home from './pages/Home.tsx';
@@ -19,13 +20,15 @@ import store from './store.ts';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route index path="/" element={<Home />} />
-      <Route index path="/login" element={<Login />} />
+    <Route path="" element={<App />}>
+      <Route index path="" element={<Home />} />
+      <Route index path="login" element={<Login />} />
       {/* Private Routes */}
       <Route path="" element={<PrivateRoute />}>
-        <Route index path="/dashboard" element={<Dashboard />} />
-        <Route index path="/settings" element={<Settings />} />
+        <Route path="dashboard" element={<Dashboard />}>
+          <Route path=":id" element={<Project />} />
+        </Route>
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Route>,
   ),

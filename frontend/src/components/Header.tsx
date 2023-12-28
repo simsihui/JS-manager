@@ -42,7 +42,7 @@ const Header = () => {
   const links = [
     // navlinks
     {
-      name: "Dashboard",
+      label: "Dashboard",
       icon: <DashboardIcon />,
       onClick: () => {
         navigate("/dashboard");
@@ -50,7 +50,7 @@ const Header = () => {
       },
     },
     {
-      name: "Settings",
+      label: "Settings",
       icon: <SettingsIcon />,
       onClick: () => {
         navigate("/settings");
@@ -58,17 +58,26 @@ const Header = () => {
       },
     },
     {
-      name: "Logout",
+      label: "Logout",
       icon: <LogoutIcon />,
       onClick: handleLogout,
     },
   ];
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Box sx={{ flexGrow: 1 }}>
-          <Link to="/">
+    <AppBar
+      position="static"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      elevation={0}
+    >
+      <Toolbar className="flex justify-between">
+        <Box>
+          <Link
+            to="/"
+            className={
+              userInfo ? "fixed left-10 top-1 sm:static sm:left-0 sm:top-0" : ""
+            }
+          >
             <Box
               component="img"
               alt="Logo"
@@ -103,9 +112,9 @@ const Header = () => {
               }}
             >
               {links.map((link) => (
-                <MenuItem onClick={link.onClick}>
+                <MenuItem key={link.label} onClick={link.onClick}>
                   <ListItemIcon>{link.icon}</ListItemIcon>
-                  <ListItemText>{link.name}</ListItemText>
+                  <ListItemText primary={link.label} />
                 </MenuItem>
               ))}
             </Menu>
