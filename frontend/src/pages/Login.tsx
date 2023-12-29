@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
+import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 
-const Login = () => {
+export default function Login() {
   const [haveAccount, setHaveAccount] = useState(true);
 
   return (
@@ -83,5 +83,4 @@ const Login = () => {
       </Paper>
     </Box>
   );
-};
-export default Login;
+}

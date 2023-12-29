@@ -1,19 +1,25 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { setCredentials } from '../features/auth/authSlice';
-import { useRegisterMutation } from '../features/user/userApiSlice';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { Error } from '../types/Error.types';
+import { setCredentials } from "../features/auth/authSlice";
+import { useRegisterMutation } from "../features/user/userApiSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { Error } from "../types/Error.types";
 
-const SignUp = () => {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -130,5 +136,4 @@ const SignUp = () => {
       </Box>
     </Box>
   );
-};
-export default SignUp;
+}

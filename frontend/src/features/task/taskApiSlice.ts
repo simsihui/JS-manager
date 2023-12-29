@@ -6,10 +6,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTask: builder.query({
       query: (data) => `${TASK_URL}/${data.id}`,
-      providesTags: (result = [], error, arg) => [
-        "Task",
-        ...result.map(({ id }) => ({ type: "Task", id })),
-      ],
+      providesTags: (result, error, arg) => [{ type: "Task", id: arg }],
     }),
     createTask: builder.mutation({
       query: (data) => ({

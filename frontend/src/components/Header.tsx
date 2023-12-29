@@ -1,18 +1,26 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem, Toolbar } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
+import {
+  Box,
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+} from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 
-import { clearCredentials } from '../features/auth/authSlice';
-import { useLogoutMutation } from '../features/user/userApiSlice';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { clearCredentials } from "../features/auth/authSlice";
+import { useLogoutMutation } from "../features/user/userApiSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
 
-const Header = () => {
+export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -66,9 +74,11 @@ const Header = () => {
 
   return (
     <AppBar
-      position="static"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      elevation={0}
+      position="sticky"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+        height: { xs: "56px", sm: "64px" },
+      }}
     >
       <Toolbar className="flex justify-between">
         <Box>
@@ -132,5 +142,4 @@ const Header = () => {
       </Toolbar>
     </AppBar>
   );
-};
-export default Header;
+}

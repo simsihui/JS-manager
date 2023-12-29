@@ -1,10 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 
-import NavBar from '../components/dashboard/NavBar';
+import NavBar from "../components/dashboard/NavBar";
 
-const Dashboard = () => {
+export default function Dashboard() {
   return (
     <>
       <NavBar />
@@ -13,5 +13,4 @@ const Dashboard = () => {
       </Box>
     </>
   );
-};
-export default Dashboard;
+}

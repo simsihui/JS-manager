@@ -1,17 +1,17 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { ChangeEvent, FormEvent, useState } from "react";
+import { toast } from "react-toastify";
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Box, TextField, Typography } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Box, TextField, Typography } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { setCredentials } from '../features/auth/authSlice';
-import { useUpdateUserMutation } from '../features/user/userApiSlice';
-import { Error } from '../types/Error.types';
+import { setCredentials } from "../features/auth/authSlice";
+import { useUpdateUserMutation } from "../features/user/userApiSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { Error } from "../types/Error.types";
 
-const Settings = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+export default function Settings() {
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   const [name, setName] = useState(userInfo?.name || "");
   const [email, setEmail] = useState(userInfo?.email || "");
@@ -19,7 +19,7 @@ const Settings = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const isSmallScreen = useMediaQuery("(max-width:600px)"); // check screen size
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
@@ -118,5 +118,4 @@ const Settings = () => {
       </Box>
     </Box>
   );
-};
-export default Settings;
+}
