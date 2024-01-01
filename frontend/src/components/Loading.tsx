@@ -1,10 +1,28 @@
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 
-export default function Loading() {
+interface Color {
+  color?:
+    | "primary"
+    | "secondary"
+    | "inherit"
+    | "success"
+    | "error"
+    | "info"
+    | "warning";
+}
+
+export default function Loading({ color = "secondary" }: Color) {
   return (
-    <Box sx={{ display: "flex" }}>
-      <CircularProgress color="secondary" />
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress color={color} />
     </Box>
   );
 }

@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import CloseIcon from "@mui/icons-material/Close";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CloseIcon from '@mui/icons-material/Close';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton, useMediaQuery, useTheme } from '@mui/material';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
-import Header from "../Header";
-import ProjectMenu from "./ProjectMenu";
+import ProjectMenu from './ProjectMenu';
 
 export default function NavBar() {
   const theme = useTheme();
@@ -25,6 +25,7 @@ export default function NavBar() {
   const tabs = [
     { label: "Overview", icon: <LeaderboardIcon /> },
     { label: "Tasks", icon: <AssignmentIcon /> },
+    { label: "Tags", icon: <LocalOfferIcon /> },
   ];
 
   const { id } = useParams();
@@ -32,15 +33,6 @@ export default function NavBar() {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Box
-        sx={{
-          width: { xs: "100vw", sm: "calc(100% - 240px)" },
-          ml: { sm: "240px" },
-        }}
-      >
-        <Header />
-      </Box>
-
       {isSmallScreen && (
         <IconButton
           aria-label="delete"

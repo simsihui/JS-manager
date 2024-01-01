@@ -16,7 +16,17 @@ const prisma: PrismaClient = new PrismaClient();
 export const authUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: {
+      projects: {
+        where: {
+          name: email.split("@")[0],
+        },
+        select: { id: true },
+      },
+    },
+  });
 
   // ensures user exists and password matches
   if (user && (await verifyPassword(password, user.password))) {
@@ -25,6 +35,7 @@ export const authUser = asyncHandler(async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      defaultProject: user.projects[0]?.id,
     });
   } else {
     res.status(401);
@@ -52,16 +63,28 @@ export const registerUser = asyncHandler(
         name: email.split("@")[0],
         email,
         password: await hashPassword(password),
+        projects: {
+          create: {
+            name: email.split("@")[0], // create default project where name === username
+          },
+        },
       },
     });
 
     // ensures user is created before sending a response
     if (user) {
+      const defaultProject = await prisma.project.findFirst({
+        where: {
+          userId: user.id,
+          name: user.name!,
+        },
+      });
       generateToken(res, user.id);
       res.status(201).send({
         id: user.id,
         name: user.name,
         email: user.email,
+        defaultProject: defaultProject?.id,
       });
     } else {
       res.status(500);

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
+import { produce } from 'immer';
 
 import { PrismaClient } from '@prisma/client';
 
@@ -33,11 +34,38 @@ export const getProject = asyncHandler(async (req: Request, res: Response) => {
       id: req.params.id,
     },
     include: {
-      tasks: true,
+      tasks: {
+        include: {
+          tags: true,
+        },
+      },
+      tags: true,
     },
   });
+
+  // For the UI in frontend:
+  // convert  tags: {taskId: string, label: string, selected: string[]}[]
+  // to       {label1: selected1, label2: selected2 ...}
   if (project) {
-    res.status(200).send(project);
+    const tagsDict = project?.tags?.reduce(
+      (acc, tag) => ({
+        ...acc,
+        [tag.id]: tag.label,
+      }),
+      {} as { [key: string]: string }
+    );
+
+    const transformed = produce(project, (draftState) => {
+      if (draftState?.tasks?.length)
+        draftState.tasks.forEach((task) => {
+          if (task?.tags?.length) {
+            task.tags.forEach((tag) => {
+              (task as any)[tagsDict[tag.tagId]] = tag.selected;
+            });
+          }
+        });
+    });
+    res.status(200).send(transformed);
   } else {
     res.status(404);
     throw new Error("Project not found");
@@ -50,7 +78,7 @@ export const getProject = asyncHandler(async (req: Request, res: Response) => {
 export const createProject = asyncHandler(
   async (req: Request, res: Response) => {
     // check if project name is unique at user level
-    const projectName = req.body.name.replace(/\s/g, "-");
+    const projectName = req?.body?.name.replace(/\s/g, "-");
     const isUnique = await prisma.project.findFirst({
       where: {
         name: projectName,
@@ -83,9 +111,10 @@ export const createProject = asyncHandler(
 export const updateProject = asyncHandler(
   async (req: Request, res: Response) => {
     // check if project name is unique at user level
+    const projectName = req?.body?.name.replace(/\s/g, "-");
     const isUnique = await prisma.project.findFirst({
       where: {
-        name: req.body.name,
+        name: projectName,
         userId: req.user.id,
       },
     });
@@ -93,10 +122,10 @@ export const updateProject = asyncHandler(
     if (!isUnique) {
       const project = await prisma.project.update({
         where: {
-          id: req.params.id,
+          id: req.body.id,
         },
         data: {
-          name: req.body.name,
+          name: projectName,
         },
       });
       res.status(201).send(project);

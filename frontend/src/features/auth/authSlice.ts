@@ -8,6 +8,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  defaultProject: string;
 }
 
 const initialState: AuthState = {

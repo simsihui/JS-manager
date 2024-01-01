@@ -78,19 +78,19 @@ export default function ProjectMenu() {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        height: {
+          xs: "56px",
+          sm: "64px",
+          position: "relative",
+        },
+      }}
+    >
       {isLoading ? (
         <Loading />
       ) : (
-        <Box
-          sx={{
-            height: {
-              xs: "56px",
-              sm: "64px",
-              position: "relative",
-            },
-          }}
-        >
+        <>
           <Button
             id="project-button"
             aria-controls={open ? "project-menu" : undefined}
@@ -209,8 +209,8 @@ export default function ProjectMenu() {
                 ))
               : null}
           </Menu>
-        </Box>
+        </>
       )}
-    </>
+    </Box>
   );
 }

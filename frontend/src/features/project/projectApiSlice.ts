@@ -6,14 +6,14 @@ export const projectApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProjects: builder.query({
       query: () => `${PROJECT_URL}`,
-      providesTags: (result = [], error, arg) => [
+      providesTags: (result = []) => [
         "Project",
         ...result.map(({ id }) => ({ type: "Project", id })),
       ],
     }),
     getProject: builder.query({
-      query: (data) => `${PROJECT_URL}/${data.id}`,
-      providesTags: (result, error, arg) => [{ type: "Project", id: arg }],
+      query: (data) => `${PROJECT_URL}/${data}`,
+      providesTags: (_, __, arg) => [{ type: "Project", id: arg }],
     }),
     createProject: builder.mutation({
       query: (data) => ({
@@ -29,9 +29,7 @@ export const projectApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Project", id: arg.id },
-      ],
+      invalidatesTags: (_, __, arg) => [{ type: "Project", id: arg.id }],
     }),
     deleteProject: builder.mutation({
       query: (data) => ({

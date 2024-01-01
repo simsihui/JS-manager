@@ -1,34 +1,29 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import LoadingButton from "@mui/lab/LoadingButton";
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Box, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { setCredentials } from "../features/auth/authSlice";
-import { useLoginMutation } from "../features/user/userApiSlice";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { Error } from "../types/Error.types";
+import { setCredentials } from '../../features/auth/authSlice';
+import { useRegisterMutation } from '../../features/user/userApiSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { Error } from '../../types/Error.types';
 
-export default function SignIn() {
+export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width:600px)"); // check screen size
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
   const { userInfo } = useAppSelector((state) => state.auth);
 
@@ -40,19 +35,23 @@ export default function SignIn() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      navigate("/");
-    } catch (err) {
-      toast.error((err as Error)?.data?.message || "Something went wrong");
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      try {
+        const res = await register({ email, password }).unwrap();
+        dispatch(setCredentials({ ...res }));
+        navigate("/");
+      } catch (err) {
+        toast.error((err as Error)?.data?.message || "Something went wrong");
+      }
     }
   };
 
   return (
-    <Box className="p-8">
+    <Box className="p-16">
       <Typography component="h1" variant="h5" className="text-center">
-        Sign In
+        Sign Up
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
         <TextField
@@ -94,6 +93,30 @@ export default function SignIn() {
             ),
           }}
         />
+        <TextField
+          size={isSmallScreen ? "small" : "medium"}
+          margin="normal"
+          required
+          fullWidth
+          name="confirmPassword"
+          label="Confirm Password"
+          type={showPassword ? "text" : "password"}
+          id="confirmPassword"
+          autoComplete="current-password"
+          value={confirmPassword}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setConfirmPassword(e.target.value)
+          }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
 
         <LoadingButton
           type="submit"
@@ -102,7 +125,7 @@ export default function SignIn() {
           className="mt-2"
           loading={isLoading}
         >
-          Login
+          Register
         </LoadingButton>
       </Box>
     </Box>
